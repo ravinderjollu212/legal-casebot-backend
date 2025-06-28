@@ -8,11 +8,16 @@ require('./vector/vectorInit.js')
 dotenv.config()
 
 const app = express()
-app.use(cors())
+
+app.use(cors({
+    origin: 'https://legal-casebot.vercel.app',
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: true
+}))
+
 app.use(express.json())
 app.use(fileUpload())
 
-// Register routes
 app.use('/api/case', caseRoutes)
 
 const PORT = process.env.PORT || 5000

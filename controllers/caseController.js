@@ -2,6 +2,7 @@ require('dotenv').config()
 const pdfParse = require('pdf-parse')
 const { OpenAI } = require('openai')
 const PDFDocument = require('pdfkit')
+const { JSDOM } = require('jsdom')
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -104,21 +105,15 @@ ${parsedText.trim()}
       break
 
     case 'Bail Application':
-      prompt = `
-You are a legal assistant. Draft a formal Bail Application in Indian legal format using the following case facts:\n\n${parsedText}
-      `.trim()
+      prompt = `You are a legal assistant. Draft a formal Bail Application in Indian legal format using the following case facts:\n\n${parsedText}`.trim()
       break
 
     case 'Discharge Application':
-      prompt = `
-You are a legal assistant. Draft a formal Discharge Application in Indian legal format using the following case details:\n\n${parsedText}
-      `.trim()
+      prompt = `You are a legal assistant. Draft a formal Discharge Application in Indian legal format using the following case details:\n\n${parsedText}`.trim()
       break
 
     case 'Case Summary':
-      prompt = `
-You are a legal assistant. Summarize the following case in 200-300 words in clear, professional language:\n\n${parsedText}
-      `.trim()
+      prompt = `You are a legal assistant. Summarize the following case in 200-300 words in clear, professional language:\n\n${parsedText}`.trim()
       break
 
     default:
@@ -148,7 +143,6 @@ You are a legal assistant. Summarize the following case in 200-300 words in clea
     res.status(500).json({ error: 'Failed to generate draft.' })
   }
 }
-
 
 exports.getCaseHistory = async (req, res) => {
   try {
@@ -210,7 +204,6 @@ exports.askQuestion = async (req, res) => {
   }
 }
 
-const { JSDOM } = require('jsdom')
 exports.downloadPDF = async (req, res) => {
   try {
     const { content } = req.body
@@ -229,7 +222,6 @@ exports.downloadPDF = async (req, res) => {
 
     doc.pipe(res)
 
-    // Heading
     doc.fontSize(18).font('Times-Bold')
       .text("IN THE HON'BLE HIGH COURT OF KARNATAKA", { align: 'center' }).moveDown(0.5)
     doc.fontSize(14).text("AT BENGALURU", { align: 'center' }).moveDown(0.5)
@@ -238,7 +230,6 @@ exports.downloadPDF = async (req, res) => {
       .text(`MEMORANDUM OF ${draftType.toUpperCase()}`, { align: 'center', underline: true })
       .moveDown(2)
 
-    // Parse HTML from Quill
     const dom = new JSDOM(content)
     const elements = dom.window.document.body.children
 
@@ -266,7 +257,6 @@ exports.downloadPDF = async (req, res) => {
       }
     }
 
-    // Footer
     doc.moveDown(2)
     doc.fontSize(12)
       .text("Place: Bengaluru", { align: 'left' })
@@ -280,8 +270,6 @@ exports.downloadPDF = async (req, res) => {
     res.status(500).json({ error: 'Failed to generate PDF.' })
   }
 }
-
-
 
 exports.summarizeCase = async (req, res) => {
   if (!parsedText.trim())

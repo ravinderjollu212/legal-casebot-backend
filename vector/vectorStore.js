@@ -10,7 +10,7 @@ let paragraphList = []
 async function embed(text) {
   const res = await openai.embeddings.create({
     model: 'text-embedding-ada-002',
-    input: text,
+    input: text
   })
   return res.data[0].embedding
 }

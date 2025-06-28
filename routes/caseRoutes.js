@@ -15,5 +15,4 @@ router.get('/history/:id', caseController.getDraftById)
 router.delete('/history/:id', caseController.deleteDraft)
 router.post('/suggest-clauses', caseController.suggestClauses)
 
-
 module.exports = router

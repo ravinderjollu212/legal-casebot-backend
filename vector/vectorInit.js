@@ -6,7 +6,7 @@ const dummyParagraphs = [
   'The accused was granted interim bail.',
   'Complainant claims mental harassment due to dowry.',
   'No physical evidence was submitted to the court.',
-  'Statements recorded under Section 161 of CrPC.',
+  'Statements recorded under Section 161 of CrPC.'
 ]
 
 async function initVectorIndex() {
