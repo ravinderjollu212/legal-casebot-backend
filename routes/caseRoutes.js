@@ -14,5 +14,6 @@ router.get('/history', caseController.getCaseHistory)
 router.get('/history/:id', caseController.getDraftById)
 router.delete('/history/:id', caseController.deleteDraft)
 router.post('/suggest-clauses', caseController.suggestClauses)
+router.post('/transcribe-audio', caseController.transcribeAudio)
 
 module.exports = router

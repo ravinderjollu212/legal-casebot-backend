@@ -174,7 +174,7 @@ exports.deleteDraft = (req, res) => {
 }
 
 exports.askQuestion = async (req, res) => {
-  const { question } = req.body
+  const { question, history = [] } = req.body
 
   if (!parsedText.trim())
     return res.status(400).json({ error: 'No case content available.' })
@@ -184,7 +184,7 @@ exports.askQuestion = async (req, res) => {
 
   const messages = [
     { role: 'system', content: `You are a helpful legal assistant. Use only this case content:\n\n${parsedText}` },
-    ...chatHistory,
+    ...history,
     { role: 'user', content: question }
   ]
 
@@ -336,5 +336,23 @@ ${content}
   } catch (err) {
     console.error('Clause Suggestion Error:', err)
     res.status(500).json({ error: 'Failed to suggest clauses.' })
+  }
+}
+
+exports.transcribeAudio = async (req, res) => {
+  const audio = req.files?.audio
+  if (!audio) return res.status(400).json({ error: 'No audio file uploaded.' })
+
+  try {
+    const response = await openai.audio.transcriptions.create({
+      file: audio.data,
+      model: 'whisper-1',
+      response_format: 'text'
+    })
+
+    res.json({ text: response })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Failed to transcribe audio.' })
   }
 }

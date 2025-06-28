@@ -19,6 +19,8 @@
     "express-fileupload": "^1.5.1",
     "faiss-node": "^0.5.1",
     "fontkit": "^2.0.4",
+    "formidable": "^3.5.4",
+    "fs": "^0.0.1-security",
     "html-pdf-node": "^1.0.8",
     "jsdom": "^26.1.0",
     "mammoth": "^1.9.1",
